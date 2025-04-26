@@ -15,4 +15,4 @@ Aplicación de consola para gestionar un inventario de productos conectando a un
 1. Clona el repositorio:
 
 ```bash
-git clone https://github.com/tu_usuario/tu_repositorio.git
+git clone https://github.com/peter-switch/crud-mysql-inventario.git
