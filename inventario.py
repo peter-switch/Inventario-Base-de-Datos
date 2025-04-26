@@ -55,25 +55,32 @@ class Conexion:
 
 
     #Creamos le método para conectar a traves del pool
-    def crear_conexion(self):
+    def obtener_conexion(self):
 
         try:
     
                 conn=self.pool.get_connection()
-                print("Conexión establecidad al pool")
+                #lo que hace get_connection() es sacar una de las 5 conexiones disponibles del pool, ya lista para usar
+                #y guardarla en conn
+                print("Conexión obtenida del pool")
                 return conn #Importante retornar el objeto conexion obtenido para poder trabajar con él
 
         except Error as e:
 
-            print(f"Error al conectar con el pool: {e}")
+            print(f"Error al obtener conexión del pool: {e}")
 
 
         
+conexion=Conexion()
+conexion.crear_pool()
+conn=conexion.obtener_conexion()
+cursor=conn.cursor()
+cursor.execute("SELECT * FROM personas")
+resultados=cursor.fetchall()
+for persona in resultados:
+     print(persona)
 
 
-conexion_01=Conexion()
-conexion_01.crear_pool()
-conexion=conexion_01.crear_conexion()
 
-cursor=conexion.cursor()
-cursor.execute("SELECT * personas")
+
+
