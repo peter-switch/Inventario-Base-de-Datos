@@ -7,7 +7,9 @@
 
 import mysql.connector
 from mysql.connector import pooling, Error
+
 #Importamos bibliotecas para trabajar con mysql, el módulo para hacer pooling y otro para trabajar los errores
+#Para que funcionen las libreriras primero hay que instalar mysql por terminal con el comando: pip install mysql-connector-python
 
 class Conexion:
 
@@ -16,33 +18,62 @@ class Conexion:
         self.host=""
         self.database="u762720325_pruebas_python"
         self.user="u762720325_admin"
-        self.password=""
+        self.password="IBMpython99@@@"
 
         #Estos 2 valores son para crear el pool de conexiones
-        self.pool_name="pool"
+        self.pool_name="pool_conexiones"
         self.pool_size=5
+
+        #Creamos la variable donde almacenaremos el objeto pool con el valor None para poder
+        #manejar excepciones en la conexión
+
+        self.pool=None
+
+    def crear_pool(self):
 
         #Vamos a crear el pool de conexiones gestionando los posibles errores con try except
         try:
             #para crear el pool es necesario usar la siguiente instrucción:
-            pool=pooling.MySQLConnectionPool(
+            self.pool=pooling.MySQLConnectionPool(
 
                 host=self.host,
                 database=self.database,
                 user=self.user,
                 password=self.password,
                 pool_name=self.pool_name,
-                pool_size=pool_size
+                pool_size=self.pool_size
 
             )
 
-            print="¡Pool de conexiones cerado con exito!"
+            print("¡POOL CREADO CON ÉXITO!")
 
 
         except Error as e:
 
-            print(f"Error al crear el pool: {e}")
+            print(f"* ERROR AL CREAR EL POOL: {e}")
+
+
 
     #Creamos le método para conectar a traves del pool
     def crear_conexion(self):
-        pass
+
+        try:
+    
+                conn=self.pool.get_connection()
+                print("Conexión establecidad al pool")
+                return conn #Importante retornar el objeto conexion obtenido para poder trabajar con él
+
+        except Error as e:
+
+            print(f"Error al conectar con el pool: {e}")
+
+
+        
+
+
+conexion_01=Conexion()
+conexion_01.crear_pool()
+conexion=conexion_01.crear_conexion()
+
+cursor=conexion.cursor()
+cursor.execute("SELECT * personas")
