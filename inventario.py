@@ -15,7 +15,7 @@ class Conexion:
 
     def __init__(self):
         #Valores necesarios para conectar a la base de datos
-        self.host=""
+        self.host="rizos.pro"
         self.database="u762720325_pruebas_python"
         self.user="u762720325_admin"
         self.password="IBMpython99@@@"
@@ -35,30 +35,31 @@ class Conexion:
         try:
             #para crear el pool es necesario usar la siguiente instrucción:
             self.pool=pooling.MySQLConnectionPool(
-
                 host=self.host,
                 database=self.database,
                 user=self.user,
                 password=self.password,
                 pool_name=self.pool_name,
                 pool_size=self.pool_size
-
             )
 
             print("¡POOL CREADO CON ÉXITO!")
-
 
         except Error as e:
 
             print(f"* ERROR AL CREAR EL POOL: {e}")
 
-
-
     #Creamos le método para conectar a traves del pool
     def obtener_conexion(self):
+        #Para obtener conexión primero hay que crear el pool
+        #Si está vacío lo creamos llamando al método crear_pool
+        if self.pool==None:
+            print(f"El pool aún no ha sido creado. Voy a crearlo por ti.")
+            self.crear_pool()
+
+
 
         try:
-    
                 conn=self.pool.get_connection()
                 #lo que hace get_connection() es sacar una de las 5 conexiones disponibles del pool, ya lista para usar
                 #y guardarla en conn
@@ -69,16 +70,25 @@ class Conexion:
 
             print(f"Error al obtener conexión del pool: {e}")
 
+    
+    class Inventario:
+         
+        def __init__(self,conexion):
+            
+         
+             
 
-        
+#Creamos el objeto conexión
 conexion=Conexion()
-conexion.crear_pool()
+#Obtenemos la conexión del pool
 conn=conexion.obtener_conexion()
+
+#A partir de aquí ya podemos trabajar con el cursor y consultas sql
 cursor=conn.cursor()
-cursor.execute("SELECT * FROM personas")
+cursor.execute("SELECT * FROM productos")
 resultados=cursor.fetchall()
-for persona in resultados:
-     print(persona)
+for productos in resultados:
+     print(productos)
 
 
 
